@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kashi Compass — Discover the Soul of Varanasi</title>
+<meta name="description" content="Kashi Compass is your digital guide to Varanasi. Scan a QR code at any monument to unlock stories, nearby food, shopping, culture and live directions across the ghats of Kashi.">
+<meta name="theme-color" content="#D97706">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2246%22 fill=%22%23D97706%22/><text x=%2250%22 y=%2266%22 font-size=%2255%22 text-anchor=%22middle%22 fill=%22%23FFF8F0%22>卐</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Yatra+One&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- ============================= NAVIGATION ============================= -->
+<header class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="#home" class="brand" aria-label="Kashi Compass home">
+      <svg class="brand-mark kc-mark" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="30" cy="30" r="28" stroke="#D97706" stroke-width="1.6"/>
+        <path d="M30 6 L33 26 L53 30 L33 34 L30 54 L27 34 L7 30 L27 26 Z" fill="#C89B3C"/>
+        <circle cx="30" cy="30" r="4.2" fill="#4B3621"/>
+      </svg>
+      <span class="brand-word">Kashi <span>Compass</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#home" class="active">Home</a>
+      <a href="#explore">Explore</a>
+      <a href="#nearby">Nearby</a>
+      <a href="#food">Food</a>
+      <a href="#shopping">Shopping</a>
+      <a href="#language">Language</a>
+      <a href="#emergency">Emergency</a>
+      <a href="#about">About</a>
+    </nav>
+
+    <div class="nav-tools">
+      <form class="nav-search" role="search" onsubmit="return handleSearch(event)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="siteSearch" placeholder="Search temples, ghats, food…" aria-label="Search Kashi Compass">
+      </form>
+      <select class="lang-select notranslate" id="langSelect" aria-label="Select language" onchange="changeLanguage(this.value)">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी</option>
+        <option value="ta">தமிழ்</option>
+        <option value="te">తెలుగు</option>
+        <option value="ml">മലയാളം</option>
+        <option value="kn">ಕನ್ನಡ</option>
+        <option value="bn">বাংলা</option>
+        <option value="mr">मराठी</option>
+        <option value="gu">ગુજરાતી</option>
+        <option value="pa">ਪੰਜਾਬੀ</option>
+        <option value="fr">Français</option>
+        <option value="es">Español</option>
+        <option value="ja">日本語</option>
+        <option value="zh-CN">中文</option>
+        <option value="de">Deutsch</option>
+        <option value="ar">العربية</option>
+        <option value="ru">Русский</option>
+      </select>
+      <button class="nav-burger" id="burger" aria-label="Open menu" aria-expanded="false">
+        <span></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+  <div class="mobile-panel" id="mobilePanel">
+    <a href="#home">Home</a>
+    <a href="#explore">Explore</a>
+    <a href="#nearby">Nearby</a>
+    <a href="#food">Food</a>
+    <a href="#shopping">Shopping</a>
+    <a href="#language">Language</a>
+    <a href="#emergency">Emergency</a>
+    <a href="#about">About</a>
+    <form class="nav-search" role="search" onsubmit="return handleSearch(event)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Search…" aria-label="Search Kashi Compass">
+    </form>
+    <select class="lang-select notranslate" aria-label="Select language" onchange="changeLanguage(this.value)">
+      <option value="en">English</option>
+      <option value="hi">हिन्दी</option>
+      <option value="ta">தமிழ்</option>
+      <option value="te">తెలుగు</option>
+      <option value="ml">മലയാളം</option>
+      <option value="kn">ಕನ್ನಡ</option>
+      <option value="bn">বাংলা</option>
+      <option value="mr">मराठी</option>
+      <option value="gu">ગુજરાતી</option>
+      <option value="pa">ਪੰਜਾਬੀ</option>
+      <option value="fr">Français</option>
+      <option value="es">Español</option>
+      <option value="ja">日本語</option>
+      <option value="zh-CN">中文</option>
+      <option value="de">Deutsch</option>
+      <option value="ar">العربية</option>
+      <option value="ru">Русский</option>
+    </select>
+  </div>
+</header>
+
+<!-- Hidden Google Translate mount point (see script.js for integration) -->
+<div id="google_translate_element" style="display:none;"></div>
+
+<!-- ============================= HERO ============================= -->
+<section class="hero" id="home">
+  <div class="petal-field" aria-hidden="true">
+    <span class="petal p1"></span><span class="petal p2"></span><span class="petal p3"></span>
+    <span class="petal p4"></span><span class="petal p5"></span><span class="petal p6"></span>
+  </div>
+  <div class="container hero-inner reveal in">
+    <div class="hero-eyebrow"><span class="dot"></span> Live guide · Varanasi, Uttar Pradesh</div>
+    <h1>Discover the Soul of Kashi</h1>
+    <p class="hero-sub">Scan. Discover. Experience. Point your camera at any QR marker across the ghats and temples of Varanasi, and let Kashi Compass narrate five thousand years of story, right where you're standing.</p>
+    <div class="hero-actions">
+      <a href="#explore" class="btn btn-primary">Explore Now</a>
+      <a href="#how-it-works" class="btn btn-ghost">How it works</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><b>84</b><span>Sacred Ghats</span></div>
+      <div class="hero-stat"><b>12</b><span>Languages Live</span></div>
+      <div class="hero-stat"><b>3,000+</b><span>Years of Story</span></div>
+    </div>
+  </div>
+  <div class="hero-scroll"><span>Scroll</span><span class="stem"></span></div>
+</section>
+
+<!-- ============================= GALLERY STRIP ============================= -->
+<section class="gallery-strip">
+  <div class="container">
+    <div class="gallery-grid">
+      <div class="gallery-item reveal">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Kashi%20vishwanath%20temple.jpg" alt="Kashi Vishwanath Temple golden spires in Varanasi" loading="lazy">
+        <div class="cap">Kashi Vishwanath Temple</div>
+      </div>
+      <div class="gallery-item reveal">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Evening%20Ganga%20Aarti%20at%20Dashashwamedh%20Ghat.JPG" alt="Priests performing Ganga Aarti at Dashashwamedh Ghat" loading="lazy">
+        <div class="cap">Dashashwamedh Ghat Aarti</div>
+      </div>
+      <div class="gallery-item reveal">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/View%20of%20temples%20from%20boat%20%40%20Varanasi.JPG" alt="Sunrise boat ride along the Ganga viewing riverside temples" loading="lazy">
+        <div class="cap">Sunrise Boat Ride</div>
+      </div>
+      <div class="gallery-item reveal">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Vishwanath%20Gali%2C%20in%20Varanasi.jpg" alt="Narrow lane of Vishwanath Gali lined with shops" loading="lazy">
+        <div class="cap">Vishwanath Gali</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= HOW IT WORKS ============================= -->
+<section id="how-it-works">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">The Experience</div>
+      <h2>How Kashi Compass Works</h2>
+      <p>No app to install, no ticket counter to find. Every monument marker unlocks its own living guide, right in your browser.</p>
+    </div>
+    <div class="how-grid">
+      <div class="how-card reveal">
+        <span class="how-step">Step One</span>
+        <div class="how-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h6v6H4zM4 14h6v6H4zM14 4h6v6h-6zM14 14h2v2h-2zM18 14h2v2h-2zM14 18h2v2h-2zM18 18h2v2h-2z"/></svg></div>
+        <h3>Scan QR</h3>
+        <p>Find the bronze Kashi Compass marker at the monument gate and scan it with your phone camera.</p>
+      </div>
+      <div class="how-card reveal">
+        <span class="how-step">Step Two</span>
+        <div class="how-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+        <h3>Read the Story</h3>
+        <p>Uncover the myth, history and meaning behind the site — narrated in your language, at your pace.</p>
+      </div>
+      <div class="how-card reveal">
+        <span class="how-step">Step Three</span>
+        <div class="how-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2C8 2 5 5.2 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.8-3-7-7-7z"/><circle cx="12" cy="9" r="2.4"/></svg></div>
+        <h3>Explore Nearby</h3>
+        <p>See what's a two-minute walk away — hidden shrines, ghats, chai stalls and craft lanes.</p>
+      </div>
+      <div class="how-card reveal">
+        <span class="how-step">Step Four</span>
+        <div class="how-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></div>
+        <h3>Enjoy Local Life</h3>
+        <p>Sip a Blue Lassi, pick up Banarasi silk, and let Kashi Compass handle the logistics.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= FEATURED ATTRACTIONS ============================= -->
+<section id="explore" class="section-alt">
+  <div class="container">
+    <div class="kc-divider reveal" aria-hidden="true">
+      <span class="line"></span>
+      <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="30" cy="30" r="26" stroke="#C89B3C" stroke-width="1.4"/>
+        <path d="M30 8 L33 27 L52 30 L33 33 L30 52 L27 33 L8 30 L27 27 Z" fill="#D97706" opacity="0.85"/>
+      </svg>
+      <span class="line"></span>
+    </div>
+    <div class="section-head reveal">
+      <div class="eyebrow">Featured Attractions</div>
+      <h2>Where Every Lane Tells a Story</h2>
+      <p>Four landmarks worth building your entire day around — each with its own deep-dive guide.</p>
+    </div>
+    <div class="card-grid">
+      <article class="place-card reveal">
+        <div class="place-media">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Kashi%20vishwanath%20temple.jpg" alt="Kashi Vishwanath Temple" loading="lazy">
+          <span class="place-tag">Temple</span>
+          <button class="bookmark-btn" aria-label="Bookmark Kashi Vishwanath Temple" onclick="toggleBookmark(this,'Kashi Vishwanath Temple')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
+        </div>
+        <div class="place-body">
+          <h3>Kashi Vishwanath Temple</h3>
+          <p>The golden-spired abode of Lord Shiva and the spiritual heart of Varanasi, freshly connected to the Ganga by the grand corridor.</p>
+          <div class="place-meta"><span>⏱ 45–60 min visit</span><span>🕓 3:00 AM – 11:00 PM</span></div>
+          <div class="place-foot"><a href="temple.html" class="btn btn-outline btn-sm">Full Guide</a><button class="btn btn-primary btn-sm" onclick="playAudio('Kashi Vishwanath Temple')">🔊 Audio</button></div>
+        </div>
+      </article>
+
+      <article class="place-card reveal">
+        <div class="place-media">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Evening%20Ganga%20Aarti%20at%20Dashashwamedh%20Ghat.JPG" alt="Ganga Aarti ceremony at Dashashwamedh Ghat" loading="lazy">
+          <span class="place-tag">Ghat</span>
+          <button class="bookmark-btn" aria-label="Bookmark Dashashwamedh Ghat" onclick="toggleBookmark(this,'Dashashwamedh Ghat')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
+        </div>
+        <div class="place-body">
+          <h3>Dashashwamedh Ghat</h3>
+          <p>Witness the nightly Ganga Aarti — seven priests, brass lamps, and centuries of ritual facing the river at dusk.</p>
+          <div class="place-meta"><span>⏱ 45 min ceremony</span><span>🕓 Daily · 6:00–7:00 PM</span></div>
+          <div class="place-foot"><a href="#nearby" class="btn btn-outline btn-sm">Details</a><button class="btn btn-primary btn-sm" onclick="playAudio('Dashashwamedh Ghat')">🔊 Audio</button></div>
+        </div>
+      </article>
+
+      <article class="place-card reveal">
+        <div class="place-media">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/View%20of%20temples%20from%20boat%20%40%20Varanasi.JPG" alt="Boat ride along the Ganga at sunrise" loading="lazy">
+          <span class="place-tag">Experience</span>
+          <button class="bookmark-btn" aria-label="Bookmark Sunrise Boat Ride" onclick="toggleBookmark(this,'Sunrise Boat Ride')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
+        </div>
+        <div class="place-body">
+          <h3>Sunrise Boat Ride</h3>
+          <p>Glide past 84 ghats as the sun rises over the Ganga — the classic Varanasi memory, best caught before 6 AM.</p>
+          <div class="place-meta"><span>⏱ 60–90 min</span><span>🕓 5:30–7:00 AM</span></div>
+          <div class="place-foot"><a href="#nearby" class="btn btn-outline btn-sm">Details</a><button class="btn btn-primary btn-sm" onclick="playAudio('Sunrise Boat Ride')">🔊 Audio</button></div>
+        </div>
+      </article>
+
+      <article class="place-card reveal">
+        <div class="place-media">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Vishwanath%20Gali%2C%20in%20Varanasi.jpg" alt="Vishwanath Gali market lane" loading="lazy">
+          <span class="place-tag">Market Lane</span>
+          <button class="bookmark-btn" aria-label="Bookmark Vishwanath Gali" onclick="toggleBookmark(this,'Vishwanath Gali')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
+        </div>
+        <div class="place-body">
+          <h3>Vishwanath Gali</h3>
+          <p>A narrow lane of silk shops, sweet stalls and brass-ware running straight from the temple to the ghats.</p>
+          <div class="place-meta"><span>⏱ 30–40 min</span><span>🕓 10:00 AM – 9:00 PM</span></div>
+          <div class="place-foot"><a href="#shopping" class="btn btn-outline btn-sm">Details</a><button class="btn btn-primary btn-sm" onclick="playAudio('Vishwanath Gali')">🔊 Audio</button></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= HIDDEN GEMS ============================= -->
+<section id="hidden-gems">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Off the Main Trail</div>
+      <h2>Hidden Gems Locals Love</h2>
+      <p>Step past the crowds — these quieter corners of Kashi reward the curious.</p>
+    </div>
+    <div class="card-grid cols-3">
+      <article class="place-card gem-card reveal">
+        <div class="place-media">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/A%20Rashi%20Valaya%20Yantra%2C%20Jantar%20Mantar.JPG" alt="Astronomical instruments at Man Mandir Observatory, Varanasi" loading="lazy">
+          <span class="gem-badge">Hidden Gem</span>
+        </div>
+        <div class="place-body">
+          <h3>Man Mandir Observatory</h3>
+          <p>An 18th-century stone observatory built by Maharaja Jai Singh II, with astronomical instruments overlooking the river.</p>
+          <div class="place-meta"><span>⏱ 20 min</span><span>🚶 8 min from Dashashwamedh</span></div>
+          <div class="place-foot"><button class="btn btn-outline btn-sm" onclick="openDirections('Man Mandir Observatory')">Directions</button></div>
+        </div>
+      </article>
+      <article class="place-card gem-card reveal">
+        <div class="place-media">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Varanasi%20256%20-%20Bharat%20Mata%20temple%20(33982674090).jpg" alt="Bharat Mata Mandir marble relief map temple, Varanasi" loading="lazy">
+          <span class="gem-badge">Hidden Gem</span>
+        </div>
+        <div class="place-body">
+          <h3>Bharat Mata Mandir</h3>
+          <p>A temple with no deity — instead, a massive marble relief map of undivided India carved into the floor.</p>
+          <div class="place-meta"><span>⏱ 25 min</span><span>🚶 12 min from BHU gate</span></div>
+          <div class="place-foot"><button class="btn btn-outline btn-sm" onclick="openDirections('Bharat Mata Mandir')">Directions</button></div>
+        </div>
+      </article>
+      <article class="place-card gem-card reveal">
+        <div class="place-media illustrated">
+          <span class="gem-badge">Hidden Gem</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        </div>
+        <div class="place-body">
+          <h3>Tulsi Manas Mandir</h3>
+          <p>Marble walls engraved with the entire Ramcharitmanas, in the garden where Tulsidas is believed to have lived.</p>
+          <div class="place-meta"><span>⏱ 30 min</span><span>🚶 15 min from Durga Kund</span></div>
+          <div class="place-foot"><button class="btn btn-outline btn-sm" onclick="openDirections('Tulsi Manas Mandir')">Directions</button></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= NEARBY PLACES ============================= -->
+<section id="nearby" class="section-alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Right Around You</div>
+      <h2>Nearby Places</h2>
+      <p>Distances measured from the Kashi Vishwanath Temple gate.</p>
+    </div>
+    <div class="card-grid">
+      <article class="place-card reveal">
+        <div class="place-media illustrated">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 21V9l8-6 8 6v12M9 21v-6h6v6"/></svg>
+        </div>
+        <div class="place-body">
+          <h3>Annapurna Temple</h3>
+          <p>Dedicated to the goddess of nourishment, right beside Vishwanath Temple — famous for its gold-plated deity.</p>
+          <div class="place-meta"><span>📍 150 m</span><span>🚶 2 min walk</span></div>
+          <div class="place-foot"><button class="btn btn-outline btn-sm" onclick="openDirections('Annapurna Temple')">Get Directions</button></div>
+        </div>
+      </article>
+      <article class="place-card reveal">
+        <div class="place-media">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Vishwanath%20Gali%2C%20in%20Varanasi.jpg" alt="Vishwanath Gali lane" loading="lazy">
+        </div>
+        <div class="place-body">
+          <h3>Vishwanath Gali</h3>
+          <p>The bustling market lane connecting the temple to the ghats, lined with silk, sweets and souvenirs.</p>
+          <div class="place-meta"><span>📍 100 m</span><span>🚶 2 min walk</span></div>
+          <div class="place-foot"><button class="btn btn-outline btn-sm" onclick="openDirections('Vishwanath Gali')">Get Directions</button></div>
+        </div>
+      </article>
+      <article class="place-card reveal">
+        <div class="place-media">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/DASHASHWAMEDH%20GHAT%2C%20VARANASI.jpg" alt="Dashashwamedh Ghat by day" loading="lazy">
+        </div>
+        <div class="place-body">
+          <h3>Dashashwamedh Ghat</h3>
+          <p>The main ghat of Varanasi, host to the nightly Ganga Aarti and a sunrise boat launch point.</p>
+          <div class="place-meta"><span>📍 400 m</span><span>🚶 6 min walk</span></div>
+          <div class="place-foot"><button class="btn btn-outline btn-sm" onclick="openDirections('Dashashwamedh Ghat')">Get Directions</button></div>
+        </div>
+      </article>
+      <article class="place-card reveal">
+        <div class="place-media">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Manikarnika%20Ghat%2C%20Varanasi%2C%20Uttar%20Pradesh.jpg" alt="Manikarnika Ghat riverfront" loading="lazy">
+        </div>
+        <div class="place-body">
+          <h3>Manikarnika Ghat</h3>
+          <p>One of Kashi's most sacred ghats, steeped in legend. Visit respectfully — quiet observation is appreciated.</p>
+          <div class="place-meta"><span>📍 650 m</span><span>🚶 9 min walk</span></div>
+          <div class="place-foot"><button class="btn btn-outline btn-sm" onclick="openDirections('Manikarnika Ghat')">Get Directions</button></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= LOCAL FOOD ============================= -->
+<section id="food">
+  <div class="container">
+    <div class="kc-divider reveal" aria-hidden="true">
+      <span class="line"></span>
+      <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="30" cy="30" r="26" stroke="#C89B3C" stroke-width="1.4"/>
+        <path d="M30 8 L33 27 L52 30 L33 33 L30 52 L27 33 L8 30 L27 27 Z" fill="#D97706" opacity="0.85"/>
+      </svg>
+      <span class="line"></span>
+    </div>
+    <div class="section-head reveal">
+      <div class="eyebrow">Taste of Kashi</div>
+      <h2>Local Food Worth the Walk</h2>
+      <p>Four legendary stops, all within easy reach of the temple.</p>
+    </div>
+    <div class="card-grid">
+      <article class="place-card reveal">
+        <div class="place-media illustrated">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v6a4 4 0 0 0 8 0V3M12 13v8M9 21h6"/></svg>
+        </div>
+        <div class="place-body">
+          <h3>Blue Lassi Shop</h3>
+          <p>A tiny, tile-walled institution near Manikarnika Ghat, whipping lassi in clay kulhads since 1925.</p>
+          <div class="place-meta"><span>🚶 5 min from Manikarnika</span><span class="price-badge">₹60–150</span></div>
+          <span class="must-try">🥭 Must-try: Pomegranate Lassi</span>
+        </div>
+      </article>
+      <article class="place-card reveal">
+        <div class="place-media illustrated">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8"/><path d="M8 12h8M12 8v8"/></svg>
+        </div>
+        <div class="place-body">
+          <h3>Kachori Gali</h3>
+          <p>A cluster of stalls serving crisp kachori with spiced sabzi and jalebi, straight off the griddle since sunrise.</p>
+          <div class="place-meta"><span>🚶 4 min from Temple</span><span class="price-badge">₹40–100</span></div>
+          <span class="must-try">🍥 Must-try: Kachori-Sabzi with Jalebi</span>
+        </div>
+      </article>
+      <article class="place-card reveal">
+        <div class="place-media illustrated">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h18M6 8v13h12V8M9 8V5a3 3 0 0 1 6 0v3"/></svg>
+        </div>
+        <div class="place-body">
+          <h3>Jyoti Cafe</h3>
+          <p>A rooftop favourite for backpackers, serving thalis and Ganga views in equal measure.</p>
+          <div class="place-meta"><span>🚶 7 min from Dashashwamedh</span><span class="price-badge">₹150–350</span></div>
+          <span class="must-try">🍛 Must-try: Banarasi Thali</span>
+        </div>
+      </article>
+      <article class="place-card reveal">
+        <div class="place-media illustrated">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19h16M4 15h16M6 15V6a6 6 0 0 1 12 0v9"/></svg>
+        </div>
+        <div class="place-body">
+          <h3>Mona Lisa Cafe</h3>
+          <p>A riverside terrace with laid-back seating and slow mornings, popular for its coffee and Aarti views.</p>
+          <div class="place-meta"><span>🚶 6 min from Dashashwamedh</span><span class="price-badge">₹120–300</span></div>
+          <span class="must-try">☕ Must-try: Masala Chai & Pancakes</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= SHOPPING ============================= -->
+<section id="shopping" class="section-alt">
+  <div class="container">
+    <div class="kc-divider reveal" aria-hidden="true">
+      <span class="line"></span>
+      <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="30" cy="30" r="26" stroke="#C89B3C" stroke-width="1.4"/>
+        <path d="M30 8 L33 27 L52 30 L33 33 L30 52 L27 33 L8 30 L27 27 Z" fill="#D97706" opacity="0.85"/>
+      </svg>
+      <span class="line"></span>
+    </div>
+    <div class="section-head reveal">
+      <div class="eyebrow">Take Kashi Home</div>
+      <h2>Shopping in the Old City</h2>
+      <p>Banaras has clothed and adorned India for a thousand years — here's where to find the real thing.</p>
+    </div>
+
+    <!-- Featured shop -->
+    <article class="place-card shop-featured reveal">
+      <div class="place-media">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Alkama%20Ansari%20-%20A%20Banarasi%20Saree%20Weaver.jpg" alt="Banarasi silk saree weaver at the loom" loading="lazy">
+        <span class="gem-badge" style="background:linear-gradient(135deg,var(--saffron),var(--gold));">Featured Shop</span>
+      </div>
+      <div class="place-body shop-featured-body">
+        <h3 style="font-size:1.4rem;">Vandana Silks Banaras</h3>
+        <p style="font-size:.94rem;">Since 1974, this Girjaghar landmark has been one of Varanasi's most trusted names for pure Katan silk and handloom Banarasi sarees, with generations of weaver families behind every piece. Ask staff to show you the difference between real zari and imitation work — most are happy to explain the craft.</p>
+        <div class="place-meta" style="margin-bottom:16px;">
+          <span>📍 D40/7-A, Girja Ghar Chauraha, Godowlia, Varanasi 221001</span>
+        </div>
+        <div class="place-meta" style="margin-bottom:18px;">
+          <span>📞 +91 70520 00318</span><span>🕓 Open until 11:00 PM</span>
+        </div>
+        <div class="place-foot">
+          <button class="btn btn-outline btn-sm" onclick="viewOnMap('Vandana Silks Banaras, Girja Ghar Chauraha, Godowlia, Varanasi 221001')">📍 View on Map</button>
+          <a class="btn btn-primary btn-sm" href="https://vandanasilks.com" target="_blank" rel="noopener">Visit Website</a>
+        </div>
+      </div>
+    </article>
+
+    <div class="card-grid cols-3">
+      <article class="place-card reveal">
+        <div class="place-media">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Hindu%20prayer%20rudraksha%20japa%20mala.jpg" alt="Rudraksha prayer beads mala" loading="lazy">
+        </div>
+        <div class="place-body">
+          <h3>Rudraksha Beads</h3>
+          <p>Sacred beads strung into malas, sold by weight and lineage near the temple's eastern gate.</p>
+          <div class="place-meta"><span>🏪 Kashi Rudraksha Bhandar, Temple Lane</span></div>
+          <div class="place-foot"><button class="btn btn-outline btn-sm" onclick="viewOnMap('Rudraksha shops near Kashi Vishwanath Temple, Varanasi')">📍 View on Map</button></div>
+        </div>
+      </article>
+      <article class="place-card reveal">
+        <div class="place-media">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Brass%20Handicrafts%20of%20Moradabad.jpg" alt="Hand-cast Indian brass handicrafts" loading="lazy">
+        </div>
+        <div class="place-body">
+          <h3>Brass Handicrafts</h3>
+          <p>Aarti lamps, idols and puja thalis hand-cast by artisans in the lanes behind Thatheri Bazaar.</p>
+          <div class="place-meta"><span>🏪 Thatheri Bazaar Brassworks</span></div>
+          <div class="place-foot"><button class="btn btn-outline btn-sm" onclick="viewOnMap('Thatheri Bazaar, Varanasi')">📍 View on Map</button></div>
+        </div>
+      </article>
+      <article class="place-card reveal">
+        <div class="place-media">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Wooden%20toys%20(cropped).JPG" alt="Hand-painted lacquered wooden toys" loading="lazy">
+        </div>
+        <div class="place-body">
+          <h3>Wooden Toys</h3>
+          <p>Brightly lacquered wooden toys and dolls, a Varanasi craft tradition dating back centuries.</p>
+          <div class="place-meta"><span>🏪 Khilona Bazaar, Chowk</span></div>
+          <div class="place-foot"><button class="btn btn-outline btn-sm" onclick="viewOnMap('Chowk Market, Varanasi')">📍 View on Map</button></div>
+        </div>
+      </article>
+      <article class="place-card reveal">
+        <div class="place-media illustrated">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3 7h7l-5.5 4.5L18.5 21 12 16.5 5.5 21l2-7.5L2 9h7z"/></svg>
+        </div>
+        <div class="place-body">
+          <h3>Gulabi Meenakari Jewellery</h3>
+          <p>Pink enamel-work jewellery, a Varanasi speciality prized for its intricate floral detailing.</p>
+          <div class="place-meta"><span>🏪 Meenakari House, Chowk</span></div>
+          <div class="place-foot"><button class="btn btn-outline btn-sm" onclick="viewOnMap('Meenakari jewellery shops, Chowk, Varanasi')">📍 View on Map</button></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= CULTURAL EXPERIENCES ============================= -->
+<section id="culture">
+  <div class="container">
+    <div class="kc-divider reveal" aria-hidden="true">
+      <span class="line"></span>
+      <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="30" cy="30" r="26" stroke="#C89B3C" stroke-width="1.4"/>
+        <path d="M30 8 L33 27 L52 30 L33 33 L30 52 L27 33 L8 30 L27 27 Z" fill="#D97706" opacity="0.85"/>
+      </svg>
+      <span class="line"></span>
+    </div>
+    <div class="section-head reveal">
+      <div class="eyebrow">Live Like a Local</div>
+      <h2>Cultural Experiences</h2>
+      <p>Three ways to move beyond sightseeing and into Kashi's daily rhythm.</p>
+    </div>
+    <div class="experience-strip">
+      <div class="exp-card reveal">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Evening%20Ganga%20Aarti%20at%20Dashashwamedh%20Ghat.JPG" alt="Ganga Aarti ceremony" loading="lazy">
+        <div class="exp-content"><h3>Evening Ganga Aarti</h3><p>Sit ghat-side or afloat as seven priests move brass lamps in unison to the sound of temple bells.</p></div>
+      </div>
+      <div class="exp-card reveal">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/View%20of%20temples%20from%20boat%20%40%20Varanasi.JPG" alt="Boat ride along the ghats" loading="lazy">
+        <div class="exp-content"><h3>Dawn Boat Along the Ghats</h3><p>Row past eighty-four ghats as the city wakes — bathers, bells, and marigolds drifting on the current.</p></div>
+      </div>
+      <div class="exp-card reveal">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Vishwanath%20Gali%2C%20in%20Varanasi.jpg" alt="Walking through Vishwanath Gali" loading="lazy">
+        <div class="exp-content"><h3>Old City Walking Trail</h3><p>Thread through Vishwanath Gali's silk shops and sweet stalls with a local storyteller's route.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= MAP ============================= -->
+<section id="map-preview" class="section-alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Get Your Bearings</div>
+      <h2>Interactive Map</h2>
+      <p>Kashi Vishwanath Temple at the centre, with the ghats, market lanes and food stops around it.</p>
+    </div>
+    <div class="map-wrap reveal">
+      <div class="map-legend">
+        <h4>Map Key</h4>
+        <ul>
+          <li><span class="dot temple"></span> Temples</li>
+          <li><span class="dot ghat"></span> Ghats</li>
+          <li><span class="dot food"></span> Food &amp; Shopping</li>
+        </ul>
+      </div>
+      <iframe
+        title="Map centred on Kashi Vishwanath Temple, Varanasi"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        src="https://maps.google.com/maps?q=Kashi%20Vishwanath%20Temple%2C%20Varanasi&t=&z=16&ie=UTF8&iwloc=&output=embed">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= LANGUAGE ============================= -->
+<section id="language" class="section-alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Speak Your Language</div>
+      <h2>Seventeen Languages, One Kashi</h2>
+      <p>Every story, menu and sign on Kashi Compass is ready to read in your language. Pick one from the navigation bar, or try it here.</p>
+    </div>
+    <div class="widget-card reveal" style="max-width:520px;margin:0 auto;text-align:center;">
+      <h4 style="justify-content:center">🌐 Choose a language</h4>
+      <select class="lang-select-standalone notranslate" style="width:100%;" aria-label="Select language" onchange="changeLanguage(this.value)">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी (Hindi)</option>
+        <option value="ta">தமிழ் (Tamil)</option>
+        <option value="te">తెలుగు (Telugu)</option>
+        <option value="ml">മലയാളം (Malayalam)</option>
+        <option value="kn">ಕನ್ನಡ (Kannada)</option>
+        <option value="bn">বাংলা (Bengali)</option>
+        <option value="mr">मराठी (Marathi)</option>
+        <option value="gu">ગુજરાતી (Gujarati)</option>
+        <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+        <option value="fr">Français (French)</option>
+        <option value="es">Español (Spanish)</option>
+        <option value="ja">日本語 (Japanese)</option>
+        <option value="zh-CN">中文 (Chinese)</option>
+        <option value="de">Deutsch (German)</option>
+        <option value="ar">العربية (Arabic)</option>
+        <option value="ru">Русский (Russian)</option>
+      </select>
+      <p style="margin-top:14px;font-size:.8rem;">Powered by Google Translate — connects automatically once the site is live.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= SMART FEATURES ============================= -->
+<section id="features">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Smart Tools</div>
+      <h2>Everything a Traveller Needs</h2>
+      <p>Built for the moment you're standing in front of the monument, phone in hand.</p>
+    </div>
+    <div class="features-grid">
+      <button class="feature-btn reveal" onclick="playAudio('this location')">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a9 9 0 0 1 0 14"/></svg></div>
+        <h4>Audio Guide</h4>
+        <p>Listen to each site's story narrated in your chosen language.</p>
+      </button>
+      <button class="feature-btn reveal" onclick="toggleBookmark(this,'this page')">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
+        <h4>Bookmark Places</h4>
+        <p>Save spots to your personal Kashi itinerary as you explore.</p>
+      </button>
+      <button class="feature-btn reveal" onclick="sharePage()">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.6l6.8-3.8M8.6 13.4l6.8 3.8"/></svg></div>
+        <h4>Share Page</h4>
+        <p>Send this guide to a fellow traveller in one tap.</p>
+      </button>
+      <button class="feature-btn reveal" onclick="document.getElementById('emergency').scrollIntoView({behavior:'smooth'})">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></div>
+        <h4>Emergency Contacts</h4>
+        <p>Police, ambulance and tourist helpline, one tap to call.</p>
+      </button>
+    </div>
+
+    <div class="widget-row">
+      <div class="widget-card reveal">
+        <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg> Varanasi Weather</h4>
+        <div class="weather-row">
+          <div><span class="weather-temp" id="weatherTemp">31°C</span><div class="weather-desc" id="weatherDesc">Clear skies · Feels like 34°C</div></div>
+          <div style="font-size:2.4rem">☀️</div>
+        </div>
+      </div>
+      <div class="widget-card reveal">
+        <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg> Estimated Crowd Levels</h4>
+        <div class="crowd-levels">
+          <div class="crowd-item"><span>Kashi Vishwanath Temple</span><div class="crowd-bar"><div class="crowd-fill" style="width:82%"></div></div></div>
+          <div class="crowd-item"><span>Dashashwamedh Ghat</span><div class="crowd-bar"><div class="crowd-fill" style="width:64%"></div></div></div>
+          <div class="crowd-item"><span>Vishwanath Gali</span><div class="crowd-bar"><div class="crowd-fill" style="width:47%"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= TRIP PLANNER ============================= -->
+<section id="planner" class="section-alt">
+  <div class="container">
+    <div class="planner-cta reveal">
+      <div class="planner-text">
+        <div class="eyebrow">Trip Planner · Preview</div>
+        <h2>Let Kashi Compass Plan Your Day</h2>
+        <p>Tell us how much time you have and what you love, and our planner will map a route across temples, ghats and food stops that fits your pace. Full booking and live rerouting arrive in our next release.</p>
+      </div>
+      <form class="planner-form" onsubmit="return generatePlan(event)">
+        <label for="planHours">Hours available</label>
+        <select id="planHours">
+          <option>2 hours</option>
+          <option selected>4 hours</option>
+          <option>Full day</option>
+        </select>
+        <label for="planInterest">Mostly interested in</label>
+        <select id="planInterest">
+          <option>Temples &amp; spirituality</option>
+          <option>Food &amp; markets</option>
+          <option>Photography &amp; ghats</option>
+          <option>A bit of everything</option>
+        </select>
+        <button type="submit" class="btn btn-primary" style="width:100%">Generate My Route</button>
+        <div class="planner-result" id="planResult"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= TESTIMONIALS ============================= -->
+<section id="testimonials">
+  <div class="container">
+    <div class="kc-divider reveal" aria-hidden="true">
+      <span class="line"></span>
+      <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="30" cy="30" r="26" stroke="#C89B3C" stroke-width="1.4"/>
+        <path d="M30 8 L33 27 L52 30 L33 33 L30 52 L27 33 L8 30 L27 27 Z" fill="#D97706" opacity="0.85"/>
+      </svg>
+      <span class="line"></span>
+    </div>
+    <div class="section-head reveal">
+      <div class="eyebrow">From Fellow Travellers</div>
+      <h2>What Visitors Are Saying</h2>
+    </div>
+    <div class="testi-track">
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p>"I scanned the code outside Kashi Vishwanath and suddenly had a personal guide. The history came alive in a way no guidebook managed."</p>
+        <div class="testi-person"><div class="testi-avatar">A</div><div><b>Anaïs Moreau</b><span>Lyon, France</span></div></div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p>"The nearby food recommendations sent us straight to Blue Lassi Shop. Best travel find of our whole India trip."</p>
+        <div class="testi-person"><div class="testi-avatar">R</div><div><b>Rohan Mehta</b><span>Mumbai, India</span></div></div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p>"Loved that it worked in Japanese instantly. Felt like Kashi had been waiting to tell me its story."</p>
+        <div class="testi-person"><div class="testi-avatar">Y</div><div><b>Yuki Tanaka</b><span>Osaka, Japan</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= EMERGENCY ============================= -->
+<section id="emergency" class="section-alt">
+  <div class="container">
+    <div class="emergency-band reveal">
+      <div>
+        <h3>Need Help Right Now?</h3>
+        <p>Tourist Police, ambulance and helpline — reachable in one tap, day or night.</p>
+      </div>
+      <div class="emergency-contacts">
+        <a class="emergency-pill" href="tel:100">🚓 Police · 100</a>
+        <a class="emergency-pill" href="tel:108">🚑 Ambulance · 108</a>
+        <a class="emergency-pill" href="tel:1364">☎ Tourist Helpline · 1364</a>
+        <a class="emergency-pill" href="tel:+915422508965">🏥 Kashi Tourist Facilitation · +91 542 250 8965</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= ABOUT ============================= -->
+<section id="about">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">About the Project</div>
+      <h2>Built for the Ghats of Kashi</h2>
+      <p>Kashi Compass is a digital companion placed at monuments across Varanasi. Scan the marker at any site and it opens straight to that place's story — no app store, no login, no data plan required beyond your browser. It's built with the local tourism department and city guides to keep every fact and every shop recommendation honest and current.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= FOOTER ============================= -->
+<footer id="contact">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand">
+          <svg class="brand-mark kc-mark" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="30" cy="30" r="28" stroke="#C89B3C" stroke-width="1.6"/>
+            <path d="M30 6 L33 26 L53 30 L33 34 L30 54 L27 34 L7 30 L27 26 Z" fill="#D97706"/>
+            <circle cx="30" cy="30" r="4.2" fill="#FFF8F0"/>
+          </svg>
+          <span class="brand-word">Kashi <span>Compass</span></span>
+        </div>
+        <p>A digital guide to Varanasi, unlocked at every monument by a single scan.</p>
+        <div class="social-row">
+          <a href="#" aria-label="Instagram" onclick="return false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+          <a href="#" aria-label="Facebook" onclick="return false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 9h3V5h-3a4 4 0 0 0-4 4v2H7v4h3v6h4v-6h3l1-4h-4V9a1 1 0 0 1 1-1z"/></svg></a>
+          <a href="#" aria-label="YouTube" onclick="return false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9.5v5l4.5-2.5z" fill="currentColor" stroke="none"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="#explore">Featured Attractions</a></li>
+          <li><a href="#hidden-gems">Hidden Gems</a></li>
+          <li><a href="#food">Local Food</a></li>
+          <li><a href="#shopping">Shopping</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#" onclick="return false">Privacy Policy</a></li>
+          <li><a href="#" onclick="return false">Terms of Use</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Partners</h4>
+        <ul>
+          <li><a href="#" onclick="return false">Uttar Pradesh Tourism</a></li>
+          <li><a href="#" onclick="return false">Varanasi Smart City</a></li>
+          <li><a href="#" onclick="return false">Kashi Vishwanath Trust</a></li>
+          <li><a href="#emergency">Emergency Directory</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Kashi Compass. All rights reserved.</span>
+      <span>Made with reverence for the city of Kashi.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+<button class="to-top" id="toTop" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<script src="script.js"></script>
+</body>
+</html>
